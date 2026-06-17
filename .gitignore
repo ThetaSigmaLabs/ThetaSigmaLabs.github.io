@@ -1,0 +1,20 @@
+# Hugo generated output (built fresh by CI on each deploy)
+/public/
+/.dev/
+/.claude/
+
+# Hugo processed-asset cache (resized images, compiled SCSS, etc.)
+/resources/_gen/
+
+# Hugo build artifacts
+.hugo_build.lock
+.hugo_stats.json
+
+# macOS
+.DS_Store
+
+# Claude Code machine-local settings
+.claude/settings.local.json
+
+# Local secrets (never commit)
+.env

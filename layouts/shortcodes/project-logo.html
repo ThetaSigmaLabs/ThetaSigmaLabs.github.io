@@ -1,0 +1,8 @@
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default "" -}}
+{{- $img := resources.Get $src -}}
+{{- if $img -}}
+<div class="not-prose mb-10 flex justify-center">
+  <img src="{{ $img.Permalink }}" alt="{{ $alt }}" class="h-28 w-auto" />
+</div>
+{{- end -}}

@@ -1,0 +1,2 @@
+{{- $page := site.GetPage (.Get 0) -}}
+{{- if and $page $page.Draft -}}<span class="text-xs text-neutral-400" style="font-weight:normal">(soon)</span>{{- end -}}

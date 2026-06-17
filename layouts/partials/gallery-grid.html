@@ -1,0 +1,37 @@
+{{- $pages := . -}}
+{{- if $pages -}}
+<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 not-prose">
+  {{- range $pages -}}
+  {{- $href := .RelPermalink -}}
+  {{- $external := false -}}
+  {{- with .Params.externalURL -}}{{- $href = . -}}{{- $external = true -}}{{- end -}}
+  <a href="{{ $href }}"
+     {{ if $external }}target="_blank" rel="noopener noreferrer"{{ end }}
+     class="group relative block aspect-square overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+    {{- with .Params.thumb -}}
+    {{- if or (strings.HasPrefix . "http://") (strings.HasPrefix . "https://") -}}
+    <img src="{{ . }}"
+         alt="{{ $.Title }}"
+         loading="lazy"
+         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+    {{- else -}}
+    {{- $img := resources.Get . -}}
+    {{- if $img -}}
+    {{- $thumb := $img.Fill "400x400 Center" -}}
+    <img src="{{ $thumb.RelPermalink }}"
+         alt="{{ $.Title }}"
+         loading="lazy"
+         class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+    {{- end -}}
+    {{- end -}}
+    {{- end -}}
+    <div class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20"></div>
+    <div class="absolute bottom-0 left-0 right-0 translate-y-full bg-gradient-to-t from-black/70 to-transparent p-3 transition-transform duration-300 group-hover:translate-y-0">
+      <p class="text-xs font-medium text-white">{{ .Title }}</p>
+    </div>
+  </a>
+  {{- end -}}
+</div>
+{{- else -}}
+<p class="italic text-neutral-500 dark:text-neutral-400">Gallery coming soon.</p>
+{{- end -}}

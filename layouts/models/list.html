@@ -1,0 +1,11 @@
+{{ define "main" }}
+<article class="max-w-prose lg:max-w-none">
+  <header class="mb-10">
+    <h1 class="text-4xl font-extrabold">{{ .Title }}</h1>
+    {{- with .Description }}
+    <p class="mt-2 text-lg text-neutral-600 dark:text-neutral-400">{{ . }}</p>
+    {{- end }}
+  </header>
+  {{ partial "gallery-grid.html" .RegularPages }}
+</article>
+{{ end }}

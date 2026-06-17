@@ -1,0 +1,51 @@
+{{ define "main" }}
+<article class="max-w-prose lg:max-w-none">
+  <header class="mb-10">
+    <h1 class="text-4xl font-extrabold">{{ .Title }}</h1>
+    {{- with .Description }}
+    <p class="mt-2 text-lg text-neutral-600 dark:text-neutral-400">{{ . }}</p>
+    {{- end }}
+  </header>
+
+  {{- $apiKey := os.Getenv "ASTROBIN_API_KEY" -}}
+  {{- $apiSecret := os.Getenv "ASTROBIN_API_SECRET" -}}
+  {{- if and $apiKey $apiSecret -}}
+    {{- $url := printf "https://www.astrobin.com/api/v1/image/?user=maudy2u&format=json&limit=20&api_key=%s&api_secret=%s" $apiKey $apiSecret -}}
+    {{- $result := try (resources.GetRemote $url) -}}
+    {{- if $result.Err -}}
+      <p class="italic text-neutral-500 dark:text-neutral-400">Gallery unavailable.</p>
+    {{- else -}}
+      {{- $data := $result.Value | transform.Unmarshal -}}
+        {{- with $data.objects -}}
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 not-prose">
+          {{- range . -}}
+          {{- $id := .hash -}}
+          {{- if not $id -}}{{- $id = index (split .url_gallery "/") 3 -}}{{- end -}}
+          <a href="https://app.astrobin.com/i/{{ $id }}/"
+             target="_blank" rel="noopener noreferrer"
+             class="group relative block aspect-square overflow-hidden rounded-lg bg-neutral-100 dark:bg-neutral-800">
+            <img src="{{ .url_gallery }}" alt="{{ .title }}" loading="lazy"
+                 class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+            <div class="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/20"></div>
+            <div class="absolute bottom-0 left-0 right-0 translate-y-full bg-gradient-to-t from-black/70 to-transparent p-3 transition-transform duration-300 group-hover:translate-y-0">
+              <p class="text-xs font-medium text-white">{{ .title }}</p>
+            </div>
+          </a>
+          {{- end -}}
+        </div>
+        {{- else -}}
+        <p class="italic text-neutral-500 dark:text-neutral-400">No images found.</p>
+        {{- end -}}
+    {{- end -}}
+  {{- else -}}
+    {{ partial "gallery-grid.html" .RegularPages }}
+  {{- end -}}
+
+  <p class="mt-6 text-sm text-neutral-500 dark:text-neutral-400">
+    Full archive on
+    <a href="https://app.astrobin.com/u/maudy2u"
+       class="text-primary-600 hover:underline dark:text-primary-400"
+       target="_blank" rel="noopener noreferrer">AstroBin →</a>
+  </p>
+</article>
+{{ end }}

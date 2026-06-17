@@ -1,0 +1,21 @@
+[[main]]
+  name = "Projects"
+  url = "/projects/"
+  weight = 10
+  identifier = "projects"
+
+[[main]]
+  name = "The Moment"
+  parent = "projects"
+  url = "/projects/the-moment/"
+  weight = 12
+
+[[main]]
+  name = "Lab Notes"
+  url = "/lab-notes/"
+  weight = 50
+
+[[main]]
+  name = "About"
+  url = "/about/"
+  weight = 60

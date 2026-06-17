@@ -1,0 +1,27 @@
+copyright = "© { year } ThetaSigma Labs"
+colorScheme = "noir"
+defaultAppearance = "dark"
+autoSwitchAppearance = true
+logo = "img/thetasigma_logo.png"
+mainSections = ["lab-notes"]
+enableSearch = true
+showHeaderRSS = true
+astrobin = "https://app.astrobin.com/u/maudy2u"
+
+[header]
+  layout = "fixed-fill-blur"
+
+[homepage]
+  layout = "custom"
+  showRecent = false
+
+[article]
+  showTaxonomies = true
+  showReadingTime = true  # ← add if wanted
+  showDate = true         # ← add if wanted
+  showAuthor = false      # ← add if wanted
+
+[list]
+  showTaxonomies = true
+  showSummary = true   # ← add
+  showCards = true     # ← add

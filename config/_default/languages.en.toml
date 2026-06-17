@@ -1,0 +1,15 @@
+locale = "en"
+label = "English"
+title = "ThetaSigma Labs"
+description = "Open source tools for astrophotography and 3D print management"
+weight = 1
+
+[params.author]
+  name = "ThetaSigma Labs"
+  headline = "Building tools for the observatory, print farm, and workshop"
+  bio = "Open-source astrophotography automation, 3D prints, and creative making from BadWolf Stellar Cafe."
+  links = [
+    { github = "https://github.com/ThetaSigmaLabs" },
+    { twitter = "https://twitter.com/ThetaSigmaLabs" },
+    { instagram = "https://instagram.com/ThetaSigmaLabs" },
+  ]

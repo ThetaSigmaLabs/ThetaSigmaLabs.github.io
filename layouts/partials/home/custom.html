@@ -1,0 +1,155 @@
+{{- $labNotes := (where .Site.RegularPages "Section" "lab-notes") | first 5 -}}
+{{- $quotes := where .Site.RegularPages "Section" "quotes" -}}
+{{- $githubURL := "" -}}
+{{- range .Site.Params.Author.links -}}
+{{- with index . "github" -}}{{- $githubURL = . -}}{{- end -}}
+{{- end -}}
+{{- $qsData := slice -}}
+{{- range $quotes -}}
+{{- $qp := . -}}
+{{- with $qp.Params.quote -}}
+{{- $entry := dict "t" . "a" $qp.Params.author "w" (default "" $qp.Params.work) "b" (default "" $qp.Params.book) -}}
+{{- $qsData = append $entry $qsData -}}
+{{- end -}}
+{{- end -}}
+{{- $heroImg := resources.Get "img/M51.jpg" -}}
+
+<div class="not-prose">
+
+  {{/* ── M51 Hero ── */}}
+  {{- with $heroImg }}
+  {{- $wide := .Resize "1400x q85" -}}
+  <section class="relative overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700"
+    style="min-height:320px;display:flex;align-items:center">
+    <img src="{{ $wide.RelPermalink }}" alt="M51, the Whirlpool Galaxy"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%" />
+    <div class="absolute inset-0"
+      style="background:linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.45) 60%, rgba(23,23,23,.92) 100%)">
+    </div>
+    <div class="relative z-10 px-10 py-8 w-full text-center">
+      <p class="text-3xl font-bold tracking-tight text-white" style="letter-spacing:-.01em">
+        {{ $.Site.Params.Author.headline }}
+      </p>
+      <p class="mt-2 text-sm text-neutral-400 mx-auto" style="max-width:42rem">
+        {{ $.Site.Params.Author.bio }}
+      </p>
+    </div>
+    <div class="absolute bottom-0 right-0 z-10 pb-3" style="padding-right:1.25rem">
+      <p class="text-xs text-neutral-500">Astrophotography from BadWolf Stellar Cafe</p>
+    </div>
+  </section>
+  {{- end }}
+
+  {{/* ── Quote ── */}}
+  {{- if $qsData }}
+  <section class="py-12">
+    <div id="ts-quote" class="max-w-2xl" style="opacity:0;transition:opacity .4s ease"></div>
+    <script>
+      (function () {
+        var qs = {{ $qsData | jsonify | safeJS
+      }};
+      if (!qs.length) return;
+      var q = qs[Math.floor(Math.random() * qs.length)];
+      var attr = '— ' + q.a;
+      if (q.w) attr += ', <em>' + q.w + '<\/em>';
+      if (q.b) attr += ' ' + q.b;
+      var el = document.getElementById('ts-quote');
+      el.innerHTML =
+        '<blockquote class="border-l-2 border-neutral-300 dark:border-neutral-600 pl-5">' +
+        '<p class="text-neutral-600 dark:text-neutral-300 italic" style="letter-spacing:.01em">"' + q.t + '"<\/p>' +
+        '<footer class="mt-2 text-sm text-neutral-400 dark:text-neutral-500">' + attr + '<\/footer>' +
+        '<\/blockquote>';
+      el.style.opacity = '1';
+    }) ();
+    </script>
+  </section>
+  {{- end }}
+
+  {{/* ── Projects ("Off the bench") ── */}}
+  <!-- <hr class="border-neutral-200 dark:border-neutral-700 opacity-30 my-6" /> -->
+  <hr class="border-neutral-200 dark:border-neutral-700 opacity-60 mt-10 mb-6" />
+  <section class="py-12">
+    <div class="mb-4 flex items-baseline justify-between">
+      <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100">Off the bench</h2>
+      <a href="/projects/" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">
+        All projects &#8594;
+      </a>
+    </div>
+    <p class="mb-8 text-sm text-neutral-500 dark:text-neutral-400">
+      Products of the lessons learned, late nights, and long runs in the lab.
+      Open-source software, hardware builds, and everything in between.
+    </p>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {{- $tsxPage := site.GetPage "/projects/tsx-cmd" }}
+      {{- if and $tsxPage (or (not $tsxPage.Draft) (not hugo.IsProduction)) }}
+      <div
+        class="group rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 p-6 transition-shadow hover:shadow-lg">
+        <h3 class="font-bold text-neutral-900 dark:text-neutral-100">tsx_cmd</h3>
+        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+          Full-observatory session planner — target selection, sequence building,
+          and automation for unattended imaging runs.
+          Open-source v1; WIP edition rebuilding the core as a Meteor web app.
+        </p>
+        <div class="mt-4 flex gap-4">
+          <a href="/projects/tsx-cmd/"
+            class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">Docs &#8594;</a>
+          {{- with $githubURL }}
+          <a href="{{ . }}" class="text-sm text-neutral-400 hover:underline dark:text-neutral-500">GitHub &#8594;</a>
+          {{- end }}
+        </div>
+      </div>
+      {{- end }}
+      <div
+        class="group rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 p-6 transition-shadow hover:shadow-lg">
+        <h3 class="font-bold text-neutral-900 dark:text-neutral-100">The Moment</h3>
+        <p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+          Automatic filament tracking, print history, and cost accounting —
+          connected to Spoolman the moment a print finishes.
+        </p>
+        <div class="mt-4 flex gap-4">
+          <a href="/projects/the-moment/"
+            class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">Overview &#8594;</a>
+          <a href="https://github.com/ThetaSigmaLabs/the-moment"
+            class="text-sm text-neutral-400 hover:underline dark:text-neutral-500">GitHub &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {{/* ── Lab notes ("From the lab") ── */}}
+  {{- if $labNotes }}
+  <!-- <hr class="border-neutral-200 dark:border-neutral-700 opacity-30 my-6" /> -->
+  <hr class="border-neutral-200 dark:border-neutral-700 opacity-60 mt-10 mb-6" />
+  <section class="py-12">
+    <div class="mb-4 flex items-baseline justify-between">
+      <h2 class="text-xl font-bold text-neutral-900 dark:text-neutral-100">From the lab</h2>
+      <a href="/lab-notes/" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">
+        All notes &#8594;
+      </a>
+    </div>
+    <p class="mb-8 text-sm text-neutral-500 dark:text-neutral-400">
+      Code snippets, docker commands, setup notes, and lessons learned.
+    </p>
+    <div class="grid gap-6 sm:grid-cols-2">
+      {{- range $labNotes }}
+      <article
+        class="group rounded-xl border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 p-6 transition-shadow hover:shadow-md">
+        <a href="{{ .RelPermalink }}" class="block">
+          <h3
+            class="font-semibold text-neutral-900 group-hover:text-primary-600 dark:text-neutral-100 dark:group-hover:text-primary-400">
+            {{ .Title }}
+          </h3>
+          <time class="mt-1 block text-xs text-neutral-400 dark:text-neutral-500">
+            {{ .Date.Format "2 January 2006" }}
+          </time>
+          {{- with .Description }}
+          <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">{{ . }}</p>
+          {{- end }}
+        </a>
+      </article>
+      {{- end }}
+    </div>
+  </section>
+  {{- end }}
+
+</div>

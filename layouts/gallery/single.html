@@ -1,0 +1,62 @@
+{{ define "main" }}
+{{ $img := .Resources.GetMatch "*.jpg" }}
+{{ if not $img }}{{ $img = .Resources.GetMatch "*.png" }}{{ end }}
+<div class="not-prose">
+
+  {{ if $img }}
+  {{ $full := $img.Resize "1400x q85" }}
+  <div class="relative overflow-hidden rounded-xl" style="height:600px">
+    <img src="{{ $full.RelPermalink }}"
+         alt="{{ .Title }}"
+         style="width:100%;height:100%;object-fit:cover;object-position:center" />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 p-8">
+      <h1 class="text-2xl font-extrabold text-white">{{ .Title }}</h1>
+      {{ with .Description }}
+      <p class="mt-1 text-sm text-neutral-300">{{ . }}</p>
+      {{ end }}
+    </div>
+  </div>
+  {{ else }}
+  <h1 class="py-8 text-4xl font-extrabold tracking-tight text-neutral-900 dark:text-neutral-100">
+    {{ .Title }}
+  </h1>
+  {{ end }}
+
+  <div class="mt-10 flex flex-wrap gap-8">
+    {{ with .Params.object }}
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">Object</p>
+      <p class="mt-1 text-neutral-900 dark:text-neutral-100">{{ . }}</p>
+    </div>
+    {{ end }}
+    {{ with .Params.constellation }}
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">Constellation</p>
+      <p class="mt-1 text-neutral-900 dark:text-neutral-100">{{ . }}</p>
+    </div>
+    {{ end }}
+    {{ with .Params.distance }}
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">Distance</p>
+      <p class="mt-1 text-neutral-900 dark:text-neutral-100">{{ . }}</p>
+    </div>
+    {{ end }}
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-widest text-neutral-400 dark:text-neutral-500">Imaged</p>
+      <p class="mt-1 text-neutral-900 dark:text-neutral-100">{{ .Date.Format "January 2006" }}</p>
+    </div>
+  </div>
+
+  {{ with .Content }}
+  <div class="prose mt-10 dark:prose-invert">{{ . }}</div>
+  {{ end }}
+
+  <div class="mt-10 border-t border-neutral-200 pt-6 dark:border-neutral-800">
+    <a href="/gallery/" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">
+      &#8592; Gallery
+    </a>
+  </div>
+
+</div>
+{{ end }}
